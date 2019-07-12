@@ -23,7 +23,7 @@ if os.name == 'nt':
 		('_SCL_SECURE_NO_DEPRECATE', None),
 		('_CRT_SECURE_NO_WARNINGS', None)
 	]
-	name_thrustrtc = 'PyThrustRTC.cp36-win_amd64'
+	name_thrustrtc = 'PyThrustRTC.cp37-win_amd64'
 else:
 	extra_compile_args = ['-std=c++11']
 	extra_link_args = ['-Wl,-rpath=$ORIGIN']
