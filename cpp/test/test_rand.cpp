@@ -11,7 +11,7 @@ int main()
 		"    RNGState state;\n"
 		"    rng.state_init(1234, idx, 0, state);\n"
 		"    for (int i=0; i<32; i++)\n"
-		"        vec_rnd[i+idx*32]=(float)rng.rand01(state);\n"
+		"        vec_rnd[i+idx*32]=(float)state.rand01();\n"
 	);
 
 	DVVector d_vec_rnd("float", 1024);

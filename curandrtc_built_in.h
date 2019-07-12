@@ -16,6 +16,29 @@ struct RNGState
 {
 	V5 v;
 	unsigned d;
+
+
+#ifdef DEVICE_ONLY
+	__device__ inline unsigned rand()
+	{
+		unsigned int t;
+		t = (v.v0 ^ (v.v0 >> 2));
+		v.v0 = v.v1;
+		v.v1 = v.v2;
+		v.v2 = v.v3;
+		v.v3 = v.v4;
+		v.v4 = (v.v4 ^ (v.v4 << 4)) ^ (t ^ (t << 1));
+		d += 362437;
+		return v.v4 + d;
+	}
+
+	__device__ inline double rand01()
+	{
+		unsigned long long urand = rand();
+		return (double)urand / (double)((unsigned long long)1 << 32);
+	}
+#endif
+
 };
 
 struct RNG
@@ -114,25 +137,6 @@ struct RNG
 			}
 		}
 		state.d += 362437 * (unsigned int)offset;
-	}
-
-	__device__ inline unsigned rand(RNGState& state)
-	{
-		unsigned int t;
-		t = (state.v.v0 ^ (state.v.v0 >> 2));
-		state.v.v0 = state.v.v1;
-		state.v.v1 = state.v.v2;
-		state.v.v2 = state.v.v3;
-		state.v.v3 = state.v.v4;
-		state.v.v4 = (state.v.v4 ^ (state.v.v4 << 4)) ^ (t ^ (t << 1));
-		state.d += 362437;
-		return state.v.v4 + state.d;
-	}
-
-	__device__ inline double rand01(RNGState& state)
-	{
-		unsigned long long urand = rand(state);
-		return (double)urand / (double)((unsigned long long)1 << 32);
 	}
 
 private:
