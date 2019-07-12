@@ -219,3 +219,12 @@ public class test_rand
 }
 
 ```
+
+## License 
+
+I've decided to license this project under ['"Anti 996" License'](https://github.com/996icu/996.ICU/blob/master/LICENSE)
+
+Basically, you can use the code any way you like unless you are working for a 996 company.
+
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
+
