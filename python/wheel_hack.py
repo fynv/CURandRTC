@@ -85,4 +85,4 @@ def convert_to_manylinux(name, version):
     os.remove(dist_zip_path)
 
 
-convert_to_manylinux('CURandRTC','0.0.3')
+convert_to_manylinux('CURandRTC','0.0.4')

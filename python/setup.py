@@ -50,7 +50,7 @@ module_CURandRTC = Extension(
 
 setup(
 	name = 'CURandRTC',
-	version = '0.0.3',
+	version = '0.0.4',
 	description = 'Random number generation module based on ThrustRTC',
 	long_description=long_description,
 	long_description_content_type='text/markdown',  

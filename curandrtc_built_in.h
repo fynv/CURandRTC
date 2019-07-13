@@ -81,7 +81,10 @@ struct RNG
 			i_mat++;
 		}
 		if (p)
+		{
+			memcpy(matrix, d_sequence_matrix + i_mat * 800, sizeof(unsigned) * 800);
 			memcpy(matrixA, d_sequence_matrix + i_mat * 800, sizeof(unsigned) * 800);
+		}
 
 		while (p)
 		{
@@ -116,7 +119,10 @@ struct RNG
 		}
 
 		if (p)
+		{
+			memcpy(matrix, d_offset_matrix + i_mat * 800, sizeof(unsigned) * 800);
 			memcpy(matrixA, d_offset_matrix + i_mat * 800, sizeof(unsigned) * 800);
+		}
 
 		while (p)
 		{
