@@ -65,7 +65,7 @@ else()
 link_directories(../install/test_java)
 endif()
 
-SET(CMAKE_INSTALL_RPATH .)
+SET(CMAKE_INSTALL_RPATH $ORIGIN/.:.)
 
 add_library (JCURandRTC_Native SHARED ${LIB_SOURCES} ${LIB_HEADERS} ${INTERNAL_HEADERS} ${SRC})
 

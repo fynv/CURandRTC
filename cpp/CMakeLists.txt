@@ -48,7 +48,7 @@ include_directories(${INCLUDE_DIR})
 link_directories(../install/lib)
 add_definitions(${DEFINES})
 
-SET(CMAKE_INSTALL_RPATH ../lib)
+SET(CMAKE_INSTALL_RPATH $ORIGIN/.:.)
 
 add_library(CURandRTC SHARED ${LIB_SOURCES} ${LIB_HEADERS} ${INTERNAL_HEADERS})
 

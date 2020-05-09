@@ -8,8 +8,6 @@ class CURAND_RTC_API DVRNG : public DeviceViewable
 {
 public:
 	static DVRNG& singlton();
-
-	virtual std::string name_view_cls() const;
 	virtual ViewBuf view() const;
 
 private:
@@ -24,11 +22,9 @@ private:
 class CURAND_RTC_API DVRNG_Multi : public DeviceViewable
 {
 public:
-	DVRNG_Multi() : m_rng(DVRNG::singlton()) {}
-
-	virtual std::string name_view_cls() const
+	DVRNG_Multi() : m_rng(DVRNG::singlton()) 
 	{
-		return m_rng.name_view_cls();
+		m_name_view_cls = m_rng.name_view_cls();
 	}
 	
 	virtual ViewBuf view() const

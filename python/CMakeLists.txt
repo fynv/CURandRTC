@@ -1,7 +1,6 @@
 cmake_minimum_required (VERSION 3.0)
 
 project(PyCURandRTC)
-find_package(PythonLibs 3 REQUIRED)
 
 add_executable(PackHeaders ../internal/pack_headers.cpp)
 add_custom_target(Run_PackHeaders
@@ -28,11 +27,10 @@ set(INTERNAL_HEADERS
 )
 
 set (SRC
-PyCURandRTC.cpp
+api_CURandRTC.cpp
 )
 
 set (INCLUDE_DIR 
-${PYTHON_INCLUDE_DIRS}
 .
 ..
 ../internal
@@ -58,10 +56,10 @@ if (WIN32)
 link_directories(../install/lib)
 else()
 add_library(PyThrustRTC SHARED IMPORTED)
-set_property(TARGET PyThrustRTC PROPERTY IMPORTED_LOCATION ../install/test_python/PyThrustRTC.so)
+set_property(TARGET PyThrustRTC PROPERTY IMPORTED_LOCATION ../install/test_python/libPyThrustRTC.so)
 endif()
 
-SET(CMAKE_INSTALL_RPATH .)
+SET(CMAKE_INSTALL_RPATH $ORIGIN/.:.)
 
 add_library (PyCURandRTC SHARED ${LIB_SOURCES} ${LIB_HEADERS} ${INTERNAL_HEADERS} ${SRC})
 
@@ -71,17 +69,10 @@ target_compile_definitions(PyCURandRTC PRIVATE CURAND_RTC_DLL_EXPORT)
 target_compile_definitions(PyCURandRTC PUBLIC THRUST_RTC_DLL_IMPORT)
 endif()
 
-target_link_libraries(PyCURandRTC ${PYTHON_LIBRARIES} PyThrustRTC)
+target_link_libraries(PyCURandRTC PyThrustRTC)
 
 add_dependencies(Run_PackHeaders PackHeaders)
 add_dependencies(PyCURandRTC Run_PackHeaders)
-
-if (WIN32) 
-set_target_properties(PyCURandRTC PROPERTIES SUFFIX ".pyd")
-else()
-set_target_properties(PyCURandRTC PROPERTIES SUFFIX ".so")
-set_target_properties(PyCURandRTC PROPERTIES PREFIX "")
-endif()
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   SET(CMAKE_INSTALL_PREFIX  ../install CACHE PATH "Install path" FORCE)
@@ -103,6 +94,8 @@ endif()
 
 set(PYTHON
 	CURandRTC.py
+	setup.py
+	README.md
 )
 
 install(FILES ${PYTHON} DESTINATION test_python)

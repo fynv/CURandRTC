@@ -38,6 +38,8 @@ DVRNG::DVRNG()
 		m_offset_matrix = (unsigned*)dptr;
 		cuMemcpyHtoD(dptr, xorwow_offset_matrix, sizeof(unsigned) * 6400);
 	}
+
+	m_name_view_cls = "RNG";
 }
 
 DVRNG::~DVRNG()
@@ -51,11 +53,6 @@ DVRNG& DVRNG::singlton()
 {
 	static DVRNG _singlton;
 	return _singlton;
-}
-
-std::string DVRNG::name_view_cls() const
-{
-	return "RNG";
 }
 
 ViewBuf DVRNG::view() const
