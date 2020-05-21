@@ -130,13 +130,12 @@ int main()
 	TRTC_For ker({ "rng", "vec_rnd" }, "idx",
 		"    RNGState state;\n"
 		"    rng.state_init(1234, idx, 0, state);\n" // initialize a state using the rng object
-		"    for (int i=0; i<32; i++)\n"
-		"        vec_rnd[i+idx*32]=(float)state.rand01();\n" // generate random number using the rng object
+		"    vec_rnd[idx]=(float)state.rand01();\n" // generate random number using the rng object
 	);
 
 	DVVector d_vec_rnd("float", 1024);
 	const DeviceViewable* args[] = { &rng, &d_vec_rnd };
-	ker.launch_n(32, args);
+	ker.launch_n(1024, args);
 
 	...
 }
@@ -153,12 +152,11 @@ ker = trtc.For(['rng','vec_rnd'], 'idx',
 	'''
     RNGState state;
     rng.state_init(1234, idx, 0, state);  // initialize a state using the rng object
-    for (int i=0; i<32; i++)
-    	vec_rnd[i+idx*32]=(float)state.rand01(); // generate random number using the rng object
+   	vec_rnd[idx]=(float)state.rand01(); // generate random number using the rng object
 	''')
 
 d_vec_rnd = trtc.device_vector('float', 1024)
-ker.launch_n(32, [rng, d_vec_rnd])
+ker.launch_n(1024, [rng, d_vec_rnd])
 ...
 ```
 
@@ -179,12 +177,11 @@ namespace test_rand
 @"
     RNGState state;
     rng.state_init(1234, idx, 0, state);  // initialize a state using the rng object
-    for (int i=0; i<32; i++)
-	    vec_rnd[i+idx*32]=(float)state.rand01(); // generate random number using the rng object "); 
+    vec_rnd[idx]=(float)state.rand01(); // generate random number using the rng object "); 
 
             DVVector d_vec_rnd = new DVVector("float", 1024);
             DeviceViewable[] kargs = new DeviceViewable[] { rng, d_vec_rnd };
-            ker.launch_n(32, kargs);
+            ker.launch_n(1024, kargs);
             ...
 
         }
@@ -209,11 +206,10 @@ public class test_rand
         String.join("",
 		"    RNGState state;\n",
 		"    rng.state_init(1234, idx, 0, state); // initialize a state using the rng object\n",
-		"    for (int i=0; i<32; i++)\n",
-		"        vec_rnd[i+idx*32]=(float)state.rand01(); // generate random number using the rng object \n"));
+		"    vec_rnd[idx]=(float)state.rand01(); // generate random number using the rng object \n"));
 		DVVector d_vec_rnd = new DVVector("float", 1024);
 		DeviceViewable[] kargs = new DeviceViewable[] { rng, d_vec_rnd };
-		ker.launch_n(32, kargs);
+		ker.launch_n(1024, kargs);
 		...
 	}
 }
