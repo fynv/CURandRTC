@@ -102,6 +102,7 @@ install(FILES ${PYTHON} DESTINATION test_python)
 
 set(PYTHON_TEST
 	test/test_rand.py
+	test/test_rand2.py
 )
 
 
