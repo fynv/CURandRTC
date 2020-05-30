@@ -6,10 +6,16 @@
 
 extern "C"
 {
+	PY_CURANDRTC_API int n_curandrtc_try_init();
 	PY_CURANDRTC_API void* n_dvrng_create();
 }
 
 #include "DVRNG.h"
+
+int n_curandrtc_try_init()
+{
+	return CURandRTC_Try_Init() ? 1 : 0;
+}
 
 void* n_dvrng_create()
 {

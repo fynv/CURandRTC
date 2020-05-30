@@ -4,6 +4,8 @@
 #include "CURandRTC_api.h"
 #include "DeviceViewable.h"
 
+bool CURAND_RTC_API CURandRTC_Try_Init();
+
 class CURAND_RTC_API DVRNG : public DeviceViewable
 {
 public:

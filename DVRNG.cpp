@@ -5,20 +5,27 @@
 #include "xor_wow_data.hpp"
 #include "curandrtc_built_in.h"
 
-void CURandRTC_Init()
+static bool CURandRTC_Init(bool istrying=false)
 {
 	static bool s_initialized = false;
 	if (!s_initialized)
 	{
 		if (!init_cuda())
 		{
-			printf("Cannot find CUDA driver. Exiting.\n");
-			exit(0);
+			printf("Cannot find CUDA driver. \n");
+			if (istrying) return false;
+			else exit(0);
 		}
 		TRTC_Add_Built_In_Header(s_name_headers[0], s_content_headers[0]);
 		TRTC_Add_Inlcude_Filename(s_name_headers[0]);
 		s_initialized = true;
 	}
+	return s_initialized;
+}
+
+bool CURandRTC_Try_Init()
+{
+	return CURandRTC_Init(true);
 }
 
 DVRNG::DVRNG()

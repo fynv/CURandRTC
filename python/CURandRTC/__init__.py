@@ -6,7 +6,8 @@ from cffi import FFI
 
 ffi  = FFI()
 
-ffi.cdef("""    
+ffi.cdef("""
+int n_curandrtc_try_init(); 
 void* n_dvrng_create();
 """)
 
@@ -18,6 +19,10 @@ elif os.name == "posix":
 path_curandrtc = os.path.dirname(__file__)+"/"+fn_curandrtc
 
 native = ffi.dlopen(path_curandrtc)
+
+if native.n_curandrtc_try_init()==0:
+	raise ImportError('cannot import CURandRTC')
+
 
 class DVRNG(trtc.DeviceViewable):
 	def __init__(self):
