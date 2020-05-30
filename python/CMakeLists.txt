@@ -56,10 +56,10 @@ if (WIN32)
 link_directories(../install/lib)
 else()
 add_library(PyThrustRTC SHARED IMPORTED)
-set_property(TARGET PyThrustRTC PROPERTY IMPORTED_LOCATION ../install/test_python/libPyThrustRTC.so)
+set_property(TARGET PyThrustRTC PROPERTY IMPORTED_LOCATION ../install/test_python/ThrustRTC/libPyThrustRTC.so)
 endif()
 
-SET(CMAKE_INSTALL_RPATH $ORIGIN/.:.)
+SET(CMAKE_INSTALL_RPATH $ORIGIN/../ThrustRTC:.)
 
 add_library (PyCURandRTC SHARED ${LIB_SOURCES} ${LIB_HEADERS} ${INTERNAL_HEADERS} ${SRC})
 
@@ -82,23 +82,17 @@ ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 install(FILES ${LIB_HEADERS} DESTINATION include)
 
 if (WIN32) 
-install(TARGETS PyCURandRTC 
-		RUNTIME DESTINATION test_python
+install(TARGETS PyCURandRTC
+		RUNTIME DESTINATION test_python/CURandRTC
 		LIBRARY DESTINATION lib
 		ARCHIVE DESTINATION lib 
 		)
 else()
-install(TARGETS PyCURandRTC DESTINATION test_python)
+install(TARGETS PyCURandRTC DESTINATION test_python/CURandRTC)
 endif()
 
-
-set(PYTHON
-	CURandRTC.py
-	setup.py
-	README.md
-)
-
-install(FILES ${PYTHON} DESTINATION test_python)
+install(FILES CURandRTC/__init__.py DESTINATION test_python/CURandRTC)
+install(FILES setup.py README.md DESTINATION test_python)
 
 set(PYTHON_TEST
 	test/test_rand.py

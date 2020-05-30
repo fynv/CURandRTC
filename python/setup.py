@@ -9,7 +9,7 @@ with open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
 	name = 'CURandRTC',
-	version = '0.1.2',
+	version = '0.1.4',
 	description = 'Random number generation module based on ThrustRTC',
 	long_description=long_description,
 	long_description_content_type='text/markdown',  
@@ -18,8 +18,8 @@ setup(
 	author='Fei Yang',
 	author_email='hyangfeih@gmail.com',
 	keywords='GPU CUDA Random XORWOR',
-	py_modules=['CURandRTC'],
-	data_files=[("Fei", ["PyCURandRTC.dll", "libPyCURandRTC.so"])],
+	packages=['CURandRTC'],
+	package_data = { 'CURandRTC': ['*.dll', '*.so']},
 	install_requires = ['ThrustRTC']
 )
 
