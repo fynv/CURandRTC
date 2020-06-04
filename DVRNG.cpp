@@ -25,6 +25,7 @@ static bool CURandRTC_Init(bool istrying=false)
 
 bool CURandRTC_Try_Init()
 {
+	if (!TRTC_Try_Init()) return false;
 	return CURandRTC_Init(true);
 }
 
