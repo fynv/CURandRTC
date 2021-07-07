@@ -4,7 +4,8 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'conda_ubuntu/meta.yaml'    
+      - 'conda_ubuntu/meta.yaml'
+      - '.github/workflows/conda_ubuntu.yml'
 
 jobs:
   build_thrustrtc_ubuntu:    
@@ -61,6 +62,9 @@ jobs:
 
     - name: Set Always Yes
       run: conda config --set always_yes yes
+
+    - name: Add Channel
+      run: conda config --add channels fyplus      
 
     - name: Install conda tools
       run: conda install conda-build anaconda-client
