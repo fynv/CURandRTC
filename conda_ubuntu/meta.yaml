@@ -1,0 +1,29 @@
+package:
+  name: curandrtc
+  version: 0.1.7
+
+source:
+  path: ..
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - cffi
+    - numpy
+    - thrustrtc
+
+  run:
+    - python
+    - cffi    
+    - numpy
+    - thrustrtc
+
+test:
+  imports: 
+    - CURandRTC
+
+about:
+  home: https://github.com/fynv/CURandRTC
+  license: Anti-996
+  summary: A GPU random number generation module based on ThrustRTC.

@@ -1,0 +1,72 @@
+name: Conda Ubuntu Publishment
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'conda_ubuntu/meta.yaml'    
+
+jobs:
+  build_thrustrtc_ubuntu:    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:    
+        repository: fynv/ThrustRTC
+        submodules: true
+        
+    - name: Create Dir build_python
+      run: mkdir build_python
+      
+    - name: Configure CMake      
+      working-directory: ./build_python
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ../python
+
+    - name: Make
+      working-directory: ./build_python    
+      run: make
+      
+    - name: Make Install
+      working-directory: ./build_python
+      run: make install
+    
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: thrustrtc_binary_ubuntu
+        path: ./install
+
+  build_ubuntu:
+    needs: [build_thrustrtc_ubuntu]    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download thrustrtc_binary_ubuntu
+      uses: actions/download-artifact@v2
+      with:
+        name: thrustrtc_binary_ubuntu
+        path: ./install    
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Add conda to system path
+      run: |
+        echo $CONDA/bin >> $GITHUB_PATH
+
+    - name: Set Always Yes
+      run: conda config --set always_yes yes
+
+    - name: Install conda tools
+      run: conda install conda-build anaconda-client
+
+    - name: Set Auto Upload
+      run: conda config --set anaconda_upload yes
+
+    - name: conda build and release
+      run: conda-build conda_ubuntu --no-test --user fyplus --token ${{ secrets.ANACONDA_TOKEN }}
