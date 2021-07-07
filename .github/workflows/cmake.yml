@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:    
-        repository: fyplus/ThrustRTC
+        repository: fynv/ThrustRTC
         submodules: true
         
     - name: Create Dir build_python
@@ -79,7 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:    
-          repository: fyplus/ThrustRTC        
+          repository: fynv/ThrustRTC        
           submodules: true
           
       - uses: ilammy/msvc-dev-cmd@v1  
