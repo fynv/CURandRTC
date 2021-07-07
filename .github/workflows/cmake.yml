@@ -1,0 +1,176 @@
+name: CMake
+
+on:
+  push:
+    branches: [ master ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build_thrustrtc_ubuntu:    
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:    
+        repository: fyplus/ThrustRTC
+        submodules: true
+        
+    - name: Create Dir build_python
+      run: mkdir build_python
+      
+    - name: Configure CMake      
+      working-directory: ./build_python
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ../python
+
+    - name: Make
+      working-directory: ./build_python    
+      run: make
+      
+    - name: Make Install
+      working-directory: ./build_python
+      run: make install
+    
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: thrustrtc_binary_ubuntu
+        path: ./install
+  
+  build_ubuntu:
+    needs: [build_thrustrtc_ubuntu]
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Download thrustrtc_binary_ubuntu
+      uses: actions/download-artifact@v2
+      with:
+        name: thrustrtc_binary_ubuntu
+        path: ./install
+        
+    - name: Create Dir build_python
+      run: mkdir build_python
+      
+    - name: Configure CMake      
+      working-directory: ./build_python
+      run: cmake -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ../python
+      
+    - name: Make
+      working-directory: ./build_python    
+      run: make
+      
+    - name: Make Install
+      working-directory: ./build_python
+      run: make install
+    
+    - name: 'Upload Artifact'
+      uses: actions/upload-artifact@v2
+      with:
+        name: binary_ubuntu
+        path: ./install
+        
+  build_thrustrtc_windows:
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+        with:    
+          repository: fyplus/ThrustRTC        
+          submodules: true
+          
+      - uses: ilammy/msvc-dev-cmd@v1  
+      
+      - name: Create Dir build_python
+        run: mkdir build_python
+        
+      - name: Configure CMake
+        working-directory: ./build_python
+        run: cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ../python   
+        
+      - name: Make
+        working-directory: ./build_python    
+        run: nmake
+
+      - name: Make Install
+        working-directory: ./build_python
+        run: nmake install        
+        
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: thrustrtc_binary_windows
+          path: ./install
+          
+  build_windows:
+    needs: [build_thrustrtc_windows]  
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Download thrustrtc_binary_windows
+        uses: actions/download-artifact@v2
+        with:
+          name: thrustrtc_binary_windows
+          path: ./install      
+      
+      - uses: ilammy/msvc-dev-cmd@v1
+      
+      - name: Create Dir build_python
+        run: mkdir build_python
+        
+      - name: Configure CMake      
+        working-directory: ./build_python
+        run: cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} ../python
+        
+      - name: Make
+        working-directory: ./build_python    
+        run: nmake
+
+      - name: Make Install
+        working-directory: ./build_python
+        run: nmake install        
+        
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v2
+        with:
+          name: binary_windows
+          path: ./install    
+      
+  build_wheel:
+    needs: [build_ubuntu, build_windows]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download binary_ubuntu
+        uses: actions/download-artifact@v2
+        with:
+          name: binary_ubuntu
+          
+      - name: Download binary_windows
+        uses: actions/download-artifact@v2
+        with:
+          name: binary_windows          
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+          
+      - name: Install dependencies
+        run: pip install setuptools wheel twine    
+       
+      - name: run setup.py
+        working-directory: ./test_python
+        run: python setup.py bdist_wheel
+        
+      - name: Twine upload
+        working-directory: ./test_python/dist
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload *.whl    
+      
+
